@@ -1,0 +1,14 @@
+# Dados reais das notas
+notas.db
+*.db
+*.pdf
+*.xlsx
+imagens/
+
+# Python
+__pycache__/
+.venv/
+venv/
+
+# Segredos
+.env
