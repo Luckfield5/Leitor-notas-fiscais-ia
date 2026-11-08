@@ -4,6 +4,14 @@ import time
 
 from google import genai
 from google.genai import types, errors
+from pathlib import Path
+
+TIPOS_IMAGEM = {
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".webp": "image/webp",
+}
 
 cliente = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
@@ -29,7 +37,8 @@ def ler_nota(caminho_imagem, tentativas=3):
     with open(caminho_imagem, "rb") as arquivo:
         bytes_imagem = arquivo.read()
 
-    imagem = types.Part.from_bytes(data=bytes_imagem, mime_type="image/png")
+        tipo = TIPOS_IMAGEM.get(Path(caminho_imagem).suffix.lower(), "image/png")
+    imagem = types.Part.from_bytes(data=bytes_imagem, mime_type=tipo)
 
     for modelo in MODELOS:
         for tentativa in range(1, tentativas + 1):

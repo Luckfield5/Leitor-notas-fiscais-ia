@@ -34,8 +34,8 @@ st.title("🧾 Leitor de Notas Fiscais")
 st.write("Envie notas em PDF e a IA extrai empresa, valor total e data.")
 
 arquivos = st.file_uploader(
-    "Escolha os PDFs",
-    type="pdf",
+    "Escolha os PDFs ou fotos das notas",
+    type=["pdf", "png", "jpg", "jpeg", "webp"],
     accept_multiple_files=True,
 )
 
@@ -54,7 +54,10 @@ if st.button("Processar notas") and arquivos:
                 caminho = Path(pasta) / arquivo.name
                 caminho.write_bytes(arquivo.getbuffer())
 
-                imagens = pdf_para_imagens(str(caminho), pasta_saida=pasta)
+                if caminho.suffix.lower() == ".pdf":
+                    imagens = pdf_para_imagens(str(caminho), pasta_saida=pasta)
+                else:
+                    imagens = [str(caminho)]  # já é imagem: usa direto
 
                 for imagem in imagens:
                     try:
